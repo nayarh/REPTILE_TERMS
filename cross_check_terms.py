@@ -3,6 +3,9 @@
 Created on Fri Apr 15 15:07:28 2022
 
 @author: nayar
+
+creating a matrix of terms and abbreviations and cross checking it with the diffrent species
+they are associated to in relation to data curated in the reptile database
 """
 
 #read csv 
@@ -20,8 +23,8 @@ abb_terms=set()
 for t in lines:
     
     
-    abb_terms.add(t.split(',')[0])
-    abb_terms.add(t.split(',')[1])
+    abb_terms.add(t.split(',')[0])       #retrieving abbreviations of terms
+    abb_terms.add(t.split(',')[1])       #retrieving terms
     
 abb_terms = list(abb_terms)
 
@@ -37,7 +40,7 @@ with open("reptile_database_2021_11.txt", encoding="utf_16") as f:
         species_name = s[1] + " " + s[2]
         for a in abb_terms:
             
-            #cross checking 
+            #cross checking with the species in the database
             if a in line:
                 if mat[abb_terms.index(a)] is not None:
                     mat[abb_terms.index(a)].append(species_name)
