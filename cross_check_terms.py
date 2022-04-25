@@ -4,34 +4,38 @@ Created on Fri Apr 15 15:07:28 2022
 
 @author: nayar
 
-creating a matrix of terms and abbreviations and cross checking it with the diffrent species
-they are associated to in relation to data curated in the reptile database
+
 """
 
 #read csv 
 #read database text file 
 #run terms against database to save species and terms 
 
-with open("reptile_terms.csv", "r") as terms:
+outfile = open("Terms_Species.txt", "a+", encoding="utf_16")
+
+with open("ReptileTerms_V2.csv", "r") as terms:
     lines = terms.readlines(0)
 
 abb_terms=set()
+abb_terms_2 = set()
 
-
-
-#putting abbreviations and terms in separate lists
+#putting abbreviations and terms into one set to remove repetitions 
 for t in lines:
     
     
-    abb_terms.add(t.split(',')[0])       #retrieving abbreviations of terms
-    abb_terms.add(t.split(',')[1])       #retrieving terms
+    #abb_terms.add(t.split(',')[0])
+    #abb_terms.add(t.split(',')[2])
+    #abb_terms.add(t.split(',')[3])
+    abb_terms.add(t.split(',')[4])
     
 abb_terms = list(abb_terms)
-
-
+# print(abb_terms)
+# quit()
 
 #Sparse Matrix
 mat = [None] * len(abb_terms)
+
+
 
 #read from reptile database
 with open("reptile_database_2021_11.txt", encoding="utf_16") as f:
@@ -40,15 +44,36 @@ with open("reptile_database_2021_11.txt", encoding="utf_16") as f:
         species_name = s[1] + " " + s[2]
         for a in abb_terms:
             
-            #cross checking with the species in the database
+            
+            
+            #cross checking 
             if a in line:
+                
                 if mat[abb_terms.index(a)] is not None:
                     mat[abb_terms.index(a)].append(species_name)
+                    
+                    
+                    
                 else:
                     mat[abb_terms.index(a)] = []
                     mat[abb_terms.index(a)].append(species_name)
                     
+                   
                     
                     
-abb_terms_name = input("What abbreviation or term?:")
-print(mat[abb_terms.index(abb_terms_name)])
+
+for a in abb_terms:
+    if a!= "TERM" and mat[abb_terms.index(a)] is not None :
+        outfile.write(str(a).upper() + "\n" + "\t" + str(mat[abb_terms.index(a)]) +"\n")
+              
+                
+outfile.close()                   
+            
+                    
+          
+
+
+# abb_terms_name = input("What abbreviation or term?:")
+# print(abb_terms_name,mat[abb_terms.index(abb_terms_name)])
+
+#outfile.write(str(a) + "\t" + str(mat[abb_terms.index(a)]))
